@@ -4,26 +4,27 @@
   <title>Maze Game</title>
   <link rel="stylesheet" type="text/css" href="./assets/styles/styles.css">
   <script type="text/javascript" src="../lib/js/p5.min.js"></script>
-  <script type="text/javascript" src="./js/index.js"></script>
+  <script type="text/javascript" src="./js/Cell.js"></script>
   <script type="text/javascript" src="./js/maze.js"></script>
+  <script type="text/javascript" src="./js/index.js"></script>
 </head>
 <body>
   <header class="header">
     <h1>The maze game</h1>
   </header>
-  <main>
+  <main onload="init()">
     <div id="maze-container"></div>
     <div class="pannel-bar">
       <div>
-        <label for="canvas-width">Width</label>
-        <input type="text" name="canvas-width" id="canvas-width" value="10">
+        <label for="canvas-row">Rows</label>
+        <input type="text" name="canvas-row" id="canvas-row" value="10">
       </div>
       <div>
-        <label for="canvas-height">Height</label>
-        <input type="text" name="canvas-height" id="canvas-height" value="10">
+        <label for="canvas-column">Columns</label>
+        <input type="text" name="canvas-column" id="canvas-column" value="10">
       </div>
       <div>
-        <button onclick="onRerender()">Rerender</button>
+        <button onclick="onRerender()" id="start-button">Start</button>
       </div>
     </div>
   </main>
