@@ -18,7 +18,7 @@ function draw() {
       let y = i * cell.h;
       stroke(255);
       noFill();
-      rect(x, y, cell.w, cell.h);
+      drawCellWalls(cell, x, y);
     });
   });
 
@@ -43,4 +43,24 @@ function drawMaze(colCount, rowCount) {
     grid[i] = cells;
   }
   loop();
+}
+
+function drawCellWalls(cell, x, y) {
+  let cellBorders = cell.borders;
+
+  if(cellBorders.top) {
+    line(x, y, x + cell.w, y);
+  }
+
+  if(cellBorders.right) {
+    line(x + cell.w, y, x + cell.w, y + cell.h);
+  }
+
+  if(cellBorders.bottom) {
+    line(x + cell.w, y + cell.h, x, y + cell.h);
+  }
+
+  if(cellBorders.left) {
+    line(x, y + cell.h, x, y);
+  }
 }
