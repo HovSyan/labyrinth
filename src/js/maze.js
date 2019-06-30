@@ -66,14 +66,18 @@ function drawCellWalls(cell, x, y) {
     line(x, y + cell.h, x, y);
   }
 
-  if(!isInFastGenerateMode && cell.isVisited) {
+  if(!isInFastGenerateMode && cell.isFixed) {
+    fill('black');
+    stroke('black');
+    rect(x + 1, y + 1, cell.w - 1, cell.h - 1);
+  } else if(!isInFastGenerateMode && cell.isVisited) {
     fill('#682e07');
     stroke('#682e07');
     rect(x, y, cell.w, cell.h);
   }
 }
 
-function generateMaze(isFastGenerateMode) {
+async function generateMaze(isFastGenerateMode) {
   isInFastGenerateMode = isFastGenerateMode;
 
   let rowCount = grid.length;
@@ -87,11 +91,19 @@ function generateMaze(isFastGenerateMode) {
   visitedCellsStack.push(grid[i][j]);
 
   while(visitedCellsStack.length > 0) {
+    if(!isInFastGenerateMode) {
+      await new Promise((resolve, reject) => {
+        loop();
+        setTimeout(() => { resolve() }, 300);
+      })
+    }
+
     const currentCell = visitedCellsStack[visitedCellsStack.length - 1];
 
     currentCell.isVisited = true;
 
     if(areAllNeighbourCellsVisited(currentCell)) {
+      currentCell.isFixed = true;
       visitedCellsStack.pop();
       continue;
     }
@@ -127,7 +139,8 @@ function generateMaze(isFastGenerateMode) {
   }
 
   loop();
-  console.log(grid);
+  isInFastGenerateMode = true;
+  loop();
 }
 
 function areAllNeighbourCellsVisited(cell) {

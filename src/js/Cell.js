@@ -10,4 +10,5 @@ function Cell(width, height, x, y) {
     left: true
   };
   this.isVisited = false;
+  this.isFixed = false;
 }
