@@ -19,12 +19,12 @@ function onRerender() {
   drawMaze(colsCount, rowsCount)
 }
 
-function generate() {
+function onGenerate() {
   console.log('In generate');
 }
 
-function fastGenerate() {
-  console.log('In fastGenerate');
+function onFastGenerate() {
+  generateMaze();
 }
 
 function addGenerateButtons() {
@@ -35,11 +35,11 @@ function addGenerateButtons() {
 
   generateButton.innerText = 'Generate';
   generateButton.id = 'generate-button';
-  generateButton.addEventListener("click", generate)
+  generateButton.addEventListener("click", onGenerate)
   parent.appendChild(generateButton);
 
   fastGenerateButton.innerText = 'Fast Generate';
   fastGenerateButton.id = 'fast-generate-buttton';
-  fastGenerateButton.addEventListener("click", fastGenerate)
+  fastGenerateButton.addEventListener("click", onFastGenerate)
   parent.appendChild(fastGenerateButton);
 }

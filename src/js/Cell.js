@@ -7,4 +7,5 @@ function Cell(width, height) {
     bottom: true,
     left: true
   }
+  this.isVisited = false;
 }
