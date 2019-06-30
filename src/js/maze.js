@@ -1,6 +1,8 @@
 const CANVAS_HEIGHT = 600;
 const CANVAS_WIDTH = 600;
 
+let isInFastGenerateMode = false;
+
 let grid = [];
 
 function setup() {
@@ -38,7 +40,7 @@ function drawMaze(colCount, rowCount) {
   for(let i = 0; i < m; i++) {
     cells = [];
     for(let j = 0; j < n; j++) {
-      cells.push(new Cell(cellWidth, cellHeight));
+      cells.push(new Cell(cellWidth, cellHeight, j, i));
     }
     grid[i] = cells;
   }
@@ -64,54 +66,127 @@ function drawCellWalls(cell, x, y) {
     line(x, y + cell.h, x, y);
   }
 
-  if(cell.isVisited) {
+  if(!isInFastGenerateMode && cell.isVisited) {
     fill('#682e07');
+    stroke('#682e07');
     rect(x, y, cell.w, cell.h);
   }
 }
 
-function generateMaze() {
+function generateMaze(isFastGenerateMode) {
+  isInFastGenerateMode = isFastGenerateMode;
+
   let rowCount = grid.length;
   let colCount = grid[0].length;
 
   let i = floor(Math.random() * rowCount);
   let j = floor(Math.random() * colCount);
 
-  step(i, j);
-}
+  let visitedCellsStack = [];
 
-function step(i, j) {
-  grid[i][j].isVisited = true;
+  visitedCellsStack.push(grid[i][j]);
 
-  let direction = floor(Math.random() * DIRECTIONS.length);
-  switch(direction) {
-    case 0: {
-      if(i > 0 && !grid[i - 1][j].isVisited) {
-        i--;
+  while(visitedCellsStack.length > 0) {
+    const currentCell = visitedCellsStack[visitedCellsStack.length - 1];
+
+    currentCell.isVisited = true;
+
+    if(areAllNeighbourCellsVisited(currentCell)) {
+      visitedCellsStack.pop();
+      continue;
+    }
+
+    let direction = getDirectionToNotVisitedCell(currentCell);
+
+    switch (direction) {
+      case DIRECTIONS.top: {
+        currentCell.borders.top = false;
+        grid[currentCell.y - 1][currentCell.x].borders.bottom = false;
+        visitedCellsStack.push(grid[currentCell.y - 1][currentCell.x]);
         break;
       }
-    }
-    case 1: {
-      if(j < grid[0].length - 1 && !grid[i][j + 1].isVisited) {
-        j++;
+      case DIRECTIONS.right: {
+        currentCell.borders.right= false;
+        grid[currentCell.y][currentCell.x + 1].borders.left = false;
+        visitedCellsStack.push(grid[currentCell.y][currentCell.x + 1]);
         break;
       }
-    }
-    case 2: {
-      if(i < grid.length - 1 && !grid[i + 1][j].isVisited) {
-        i++;
+      case DIRECTIONS.bottom: {
+        currentCell.borders.bottom = false;
+        grid[currentCell.y + 1][currentCell.x].borders.top = false;
+        visitedCellsStack.push(grid[currentCell.y + 1][currentCell.x]);
         break;
       }
-    }
-    case 3: {
-      if(j > 0 && !grid[i][j - 1].isVisited) {
-        j--;
+      case DIRECTIONS.left: {
+        currentCell.borders.left = false;
+        grid[currentCell.y][currentCell.x - 1].borders.right = false;
+        visitedCellsStack.push(grid[currentCell.y][currentCell.x - 1]);
         break;
       }
     }
   }
 
   loop();
+  console.log(grid);
+}
 
-  setTimeout(() => {step(i, j)}, 1000);
+function areAllNeighbourCellsVisited(cell) {
+  let x = cell.x;
+  let y = cell.y;
+
+  if(x > 0 && !grid[y][x - 1].isVisited) {
+    return false;
+  }
+
+  if(x < grid[0].length - 1 && !grid[y][x + 1]) {
+    return false;
+  }
+
+  if(y > 0 && !grid[y - 1][x].isVisited) {
+    return false;
+  }
+
+  return !(y < grid.length - 1 && !grid[y + 1][x].isVisited);
+
+
+}
+
+function getDirectionToNotVisitedCell(cell) {
+  let direction;
+  let isDirectionValid = false;
+  let x = cell.x;
+  let y = cell.y;
+
+  while(!isDirectionValid) {
+    direction = floor(Math.random() * DIRECTIONS.length);
+
+    switch (direction) {
+      case DIRECTIONS.top: {
+        if(y !== 0 && !grid[y - 1][x].isVisited) {
+          isDirectionValid = true;
+        }
+        break;
+      }
+      case DIRECTIONS.right: {
+        if(x !== grid[0].length - 1 && !grid[y][x + 1].isVisited) {
+          isDirectionValid = true;
+        }
+        break;
+      }
+      case DIRECTIONS.bottom: {
+        if(y !== grid.length - 1 && !grid[y + 1][x].isVisited) {
+          isDirectionValid = true;
+        }
+        break;
+      }
+      case DIRECTIONS.left: {
+        if(x !== 0 && !grid[y][x - 1].isVisited) {
+          isDirectionValid = true;
+        }
+        break;
+      }
+    }
+  }
+
+  return direction;
 }

@@ -20,11 +20,11 @@ function onRerender() {
 }
 
 function onGenerate() {
-  console.log('In generate');
+  generateMaze(false);
 }
 
 function onFastGenerate() {
-  generateMaze();
+  generateMaze(true);
 }
 
 function addGenerateButtons() {
