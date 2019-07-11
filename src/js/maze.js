@@ -151,7 +151,7 @@ function areAllNeighbourCellsVisited(cell) {
     return false;
   }
 
-  if(x < grid[0].length - 1 && !grid[y][x + 1]) {
+  if(x < grid[0].length - 1 && !grid[y][x + 1].isVisited) {
     return false;
   }
 
