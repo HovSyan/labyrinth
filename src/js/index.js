@@ -63,13 +63,13 @@ function addSpeedInput() {
   speedInput.id = 'speed';
   speedInput.value = '1';
   speedInput.min = '1';
-  speedInput.max = '10';
+  speedInput.max = '20';
   speedInput.addEventListener('change', (event) => {
     let value = +event.currentTarget.value;
 
     if(value < 1) {
       value = 1;
-    } else if(value > 10) {
+    } else if(value > 20) {
       value = 10;
     }
 
