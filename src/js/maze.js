@@ -1,6 +1,10 @@
 const CANVAS_HEIGHT = 600;
 const CANVAS_WIDTH = 600;
 
+let stop = false;
+
+let generation_speed = 500;
+
 let isInFastGenerateMode = false;
 
 let grid = [];
@@ -78,6 +82,7 @@ function drawCellWalls(cell, x, y) {
 }
 
 async function generateMaze(isFastGenerateMode) {
+  stop = false;
   isInFastGenerateMode = isFastGenerateMode;
 
   let rowCount = grid.length;
@@ -91,10 +96,15 @@ async function generateMaze(isFastGenerateMode) {
   visitedCellsStack.push(grid[i][j]);
 
   while(visitedCellsStack.length > 0) {
+    if(stop) {
+      stop = false;
+      return;
+    }
+
     if(!isInFastGenerateMode) {
       await new Promise((resolve, reject) => {
         loop();
-        setTimeout(() => { resolve() }, 300);
+        setTimeout(() => { resolve() }, generation_speed);
       })
     }
 
