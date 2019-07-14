@@ -2,6 +2,7 @@ const CANVAS_HEIGHT = 600;
 const CANVAS_WIDTH = 600;
 
 let stop = false;
+let done = false;
 
 let generation_speed = 500;
 
@@ -82,6 +83,7 @@ function drawCellWalls(cell, x, y) {
 }
 
 async function generateMaze(isFastGenerateMode) {
+  done = false;
   stop = false;
   isInFastGenerateMode = isFastGenerateMode;
 
@@ -151,6 +153,8 @@ async function generateMaze(isFastGenerateMode) {
   loop();
   isInFastGenerateMode = true;
   loop();
+  done = true;
+  addPlayButton();
 }
 
 function areAllNeighbourCellsVisited(cell) {

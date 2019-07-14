@@ -8,6 +8,7 @@ function init() {
 function onRerender() {
   stop = true;
   removeSpeedInput();
+  removePlayButton();
   document.getElementById('start-button').innerText = 'Rerender';
 
   if(!document.getElementById('generate-button') &&
@@ -22,6 +23,7 @@ function onRerender() {
 }
 
 function onGenerate() {
+  removePlayButton();
   generateMaze(false);
 
   if(!document.getElementById('speed')) {
@@ -31,6 +33,7 @@ function onGenerate() {
 
 function onFastGenerate() {
   removeSpeedInput();
+  removePlayButton();
   generateMaze(true);
 }
 
@@ -89,5 +92,23 @@ function removeSpeedInput() {
 
     const speedInputLabel = document.getElementById('speed-input-label');
     speedInputLabel.parentNode.removeChild(speedInputLabel);
+  }
+}
+
+function addPlayButton() {
+  if(!document.getElementById('play') && done) {
+    const button = document.createElement('button');
+
+    button.innerText = 'Solve It';
+    button.id = 'play';
+    document.getElementsByClassName('play-div')[0].appendChild( button);
+  }
+}
+
+function removePlayButton() {
+  if(document.getElementById('play')) {
+    const playButton = document.getElementById('play');
+
+    playButton.parentNode.removeChild(playButton);
   }
 }
