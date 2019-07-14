@@ -1,3 +1,5 @@
+let isInGameMode = false;
+
 function init() {
   let colsCount = document.getElementById('canvas-column').value;
   let rowsCount = document.getElementById('canvas-row').value;
@@ -34,7 +36,7 @@ function onGenerate() {
 function onFastGenerate() {
   removeSpeedInput();
   removePlayButton();
-  generateMaze(true);
+  generateMaze(true).catch(e => console.log(e));
 }
 
 function addGenerateButtons() {
@@ -101,6 +103,7 @@ function addPlayButton() {
 
     button.innerText = 'Solve It';
     button.id = 'play';
+    button.addEventListener('click', () => { preparationForPlaying(); doPlay(); });
     document.getElementsByClassName('play-div')[0].appendChild( button);
   }
 }

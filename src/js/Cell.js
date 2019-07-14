@@ -11,4 +11,14 @@ function Cell(width, height, x, y) {
   };
   this.isVisited = false;
   this.isFixed = false;
+  this.isPlayerCurrentCell = false;
+  this.isEndCell = false;
+
+  this.setIsPlayerCurrentCell = function setIsPlayerCurrentCell(value) {
+    this.isPlayerCurrentCell = value;
+  };
+
+  this.setIsEndCell = function setIsEndCell(value) {
+    this.isEndCell = value;
+  }
 }

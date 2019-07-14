@@ -8,6 +8,12 @@ let generation_speed = 500;
 
 let isInFastGenerateMode = false;
 
+let playerCurrentPointX;
+let playerCurrentPointY;
+
+let gameEndPointX;
+let gameEndPointY;
+
 let grid = [];
 
 function setup() {
@@ -79,6 +85,18 @@ function drawCellWalls(cell, x, y) {
     fill('#682e07');
     stroke('#682e07');
     rect(x, y, cell.w, cell.h);
+  }
+
+  if(cell.isEndCell) {
+    fill('#c7ab7b');
+    stroke('#c7ab7b');
+    ellipse(x + cell.w / 2, y + cell.h / 2, cell.w, cell.h);
+  }
+
+  if(cell.isPlayerCurrentCell) {
+    fill('#7b98c7');
+    stroke('#7b98c7');
+    ellipse(x + cell.w / 2, y + cell.h / 2, cell.w, cell.h);
   }
 }
 
