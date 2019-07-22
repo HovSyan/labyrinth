@@ -33,6 +33,8 @@ function doPlay() {
       return;
     }
   };
+
+  setTouchEvents();
 }
 
 function removeUnnecessaryButtons() {
@@ -59,6 +61,7 @@ function stopPlaying() {
   isInGameMode = false;
   document.getElementsByClassName('pannel-bar')[0].style.display = 'block';
   document.onkeydown = function empty() {};
+  resetTouchEvents();
   onRerender();
 }
 
