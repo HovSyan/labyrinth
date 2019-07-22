@@ -42,8 +42,8 @@ function drawMaze(colCount, rowCount) {
   n = +colCount;
   m = +rowCount;
 
-  let cellHeight = floor(CANVAS_HEIGHT / m);
-  let cellWidth = floor(CANVAS_WIDTH / n);
+  let cellHeight = CANVAS_HEIGHT / m;
+  let cellWidth = CANVAS_WIDTH / n;
 
   grid.length = 0;
 
