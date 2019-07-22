@@ -17,14 +17,14 @@ function doPlay() {
 
   isInGameMode = true;
 
-  document.onkeypress = function(e) {
-    if(e.key === 'w' && isPossibleMovement(DIRECTIONS.top)) {
+  document.onkeydown = function(e) {
+    if((e.key === 'w' || e.key === 'ArrowUp') && isPossibleMovement(DIRECTIONS.top)) {
       move(DIRECTIONS.top);
-    } else if(e.key === 'd' && isPossibleMovement(DIRECTIONS.right)) {
+    } else if((e.key === 'd' || e.key === 'ArrowRight') && isPossibleMovement(DIRECTIONS.right)) {
       move(DIRECTIONS.right);
-    } else if(e.key === 's' && isPossibleMovement(DIRECTIONS.bottom)) {
+    } else if((e.key === 's' || e.key === 'ArrowDown') && isPossibleMovement(DIRECTIONS.bottom)) {
       move(DIRECTIONS.bottom);
-    } else if(e.key === 'a' && isPossibleMovement(DIRECTIONS.left)) {
+    } else if((e.key === 'a' || e.key === 'ArrowLeft') && isPossibleMovement(DIRECTIONS.left)) {
       move(DIRECTIONS.left);
     }
 
@@ -32,7 +32,7 @@ function doPlay() {
       setTimeout(() => onWin());
       return;
     }
-  }
+  };
 }
 
 function removeUnnecessaryButtons() {
@@ -58,6 +58,7 @@ function stopPlaying() {
 
   isInGameMode = false;
   document.getElementsByClassName('pannel-bar')[0].style.display = 'block';
+  document.onkeydown = function empty() {};
   onRerender();
 }
 
@@ -108,5 +109,5 @@ function move(direction) {
 }
 
 function onWin() {
-  alert('You Win', onRerender());
+  alert('You Win', stopPlaying());
 }
