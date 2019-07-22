@@ -1,11 +1,9 @@
 // Code from https://stackoverflow.com/questions/2264072/detect-a-finger-swipe-through-javascript-on-the-iphone-and-android
 
+let isReadyToListenToTouch = true;
+
 function setTouchEvents() {
   document.addEventListener('touchstart', handleTouchStart, false);
-  document.addEventListener('touchmove', handleTouchMove, false);
-
-  let xDown = null;
-  let yDown = null;
 
   function getTouches(evt) {
     return evt.touches ||             // browser API
@@ -13,42 +11,55 @@ function setTouchEvents() {
   }
 
   function handleTouchStart(evt) {
-    const firstTouch = getTouches(evt)[0];
-    xDown = firstTouch.clientX;
-    yDown = firstTouch.clientY;
+    if(isReadyToListenToTouch) {
+      isReadyToListenToTouch = false;
+      const firstTouch = getTouches(evt)[0];
+      let xDown = firstTouch.clientX;
+      let yDown = firstTouch.clientY;
+
+      let direction = determineDirectionByTouch(xDown, yDown);
+
+      if (isPossibleMovement(direction)) {
+        move(direction);
+      }
+
+      if (playerCurrentPointY === gameEndPointY && playerCurrentPointX === gameEndPointX) {
+        setTimeout(() => onWin());
+        return;
+      }
+      isReadyToListenToTouch = true;
+    }
   }
 
-  function handleTouchMove(evt) {
-    if ( ! xDown || ! yDown ) {
-      return;
-    }
+  function determineDirectionByTouch(touchX, touchY) {
+    let clientHeight = document.getElementsByTagName('html')[0].clientHeight;
+    let clientWidth = document.getElementsByTagName('html')[0].clientWidth;
 
-    let xUp = evt.touches[0].clientX;
-    let yUp = evt.touches[0].clientY;
+    let distanceFromTop = touchY;
+    let distanceFromRight = clientWidth - touchX;
+    let distanceFromBottom = clientHeight - touchY;
+    let distanceFromLeft = touchX;
 
-    let xDiff = xDown - xUp;
-    let yDiff = yDown - yUp;
+    let minValue = Math.min(...[distanceFromTop, distanceFromBottom,
+                                    distanceFromLeft, distanceFromRight]);
 
-    if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {
-      if ( xDiff > 0 && isPossibleMovement(DIRECTIONS.left)) {
-        move(DIRECTIONS.left);
-      } else if(isPossibleMovement(DIRECTIONS.right)) {
-        move(DIRECTIONS.right);
+    switch (minValue) {
+      case distanceFromTop: {
+        return DIRECTIONS.top
       }
-    } else {
-      if ( yDiff > 0 && isPossibleMovement(DIRECTIONS.top)) {
-        move(DIRECTIONS.top);
-      } else if(isPossibleMovement(DIRECTIONS.bottom)) {
-        move(DIRECTIONS.bottom);
+      case distanceFromLeft: {
+        return DIRECTIONS.left
+      }
+      case distanceFromRight: {
+        return DIRECTIONS.right
+      }
+      case distanceFromBottom: {
+        return DIRECTIONS.bottom
       }
     }
-    /* reset values */
-    xDown = null;
-    yDown = null;
   }
 }
 
 function resetTouchEvents() {
   document.ontouchstart = function empty() {}
-  document.ontouchend = function empty() {}
 }
